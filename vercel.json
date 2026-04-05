@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    {"source": "/preston", "destination": "/preston.html"},
-    {"source": "/george", "destination": "/george.html"}
+    {"source": "/:slug", "destination": "/:slug.html"}
   ]
 }
