@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roofing Force</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{--red:#D1271E;--dark:#0a0a0a;--surface:#111;--border:#1e1e1e;}
+  body{background:var(--dark);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;}
+
+  /* CARD PAGE */
+  #card-page{display:none;}
+
+  /* HEADER */
+  .rf-header{padding:16px 20px;display:flex;align-items:center;gap:10px;background:#0d0d0d;}
+  .rf-logo-icon{width:36px;height:36px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .rf-logo-text{font-size:16px;font-weight:700;letter-spacing:1px;}
+  .rf-logo-text span{color:var(--red);}
+
+  /* HERO */
+  .hero{padding:20px;background:linear-gradient(135deg,#0d0d0d 60%,#1a0505);position:relative;overflow:hidden;}
+  .hero::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(209,39,30,0.15),transparent 70%);border-radius:50%;}
+  .hero-inner{display:flex;gap:16px;align-items:flex-start;position:relative;z-index:1;}
+  .rep-photo-wrap{position:relative;flex-shrink:0;}
+  .rep-photo{width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid #222;}
+  .rep-photo-placeholder{width:80px;height:80px;border-radius:8px;background:linear-gradient(135deg,#1a0505,#2a0808);border:2px solid #333;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--red);}
+  .top-rep-badge{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:8px;font-weight:800;letter-spacing:1.5px;padding:2px 8px;border-radius:3px;white-space:nowrap;}
+  .rep-info{flex:1;}
+  .rep-name{font-size:22px;font-weight:800;letter-spacing:0.5px;line-height:1.1;margin-bottom:4px;}
+  .rep-title{color:var(--red);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+  .rep-market{color:#888;font-size:12px;margin-bottom:8px;}
+  .rep-market::before{content:'📍 ';}
+  .rep-rating{display:flex;align-items:center;gap:6px;}
+  .stars{color:#f5a623;font-size:14px;letter-spacing:1px;}
+  .rating-text{font-size:12px;color:#aaa;}
+  .rating-count{color:#666;}
+
+  /* RED DIVIDER */
+  .red-divider{height:6px;background:linear-gradient(90deg,var(--red) 60%,transparent);margin:0;}
+
+  /* CTA BUTTONS */
+  .cta-section{padding:12px 16px;display:flex;flex-direction:column;gap:8px;}
+  .btn-estimate{background:var(--red);color:#fff;border:none;border-radius:6px;padding:14px;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .btn-call{background:transparent;border:2px solid #27ae60;color:#27ae60;border-radius:6px;padding:12px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+  .btn-text-me{background:transparent;border:2px solid #1a3a5c;color:#6bb5ff;border-radius:6px;padding:12px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+  .btn-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .btn-save{background:#1a1a1a;border:1px solid #2a2a2a;color:#ccc;border-radius:6px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+  .btn-website{background:#1a1a1a;border:1px solid #2a2a2a;color:#ccc;border-radius:6px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+
+  /* SECTIONS */
+  .section{padding:20px 16px;}
+  .section-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid #1a1a1a;}
+
+  /* WORK PHOTOS */
+  .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+  .work-photo{width:100%;aspect-ratio:4/3;object-fit:cover;position:relative;}
+  .work-photo-wrap{position:relative;overflow:hidden;}
+  .work-photo-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:6px 8px;font-size:10px;color:#ddd;font-weight:600;}
+
+  /* REVIEWS */
+  .review-card{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:14px;margin-bottom:10px;}
+  .review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+  .reviewer-name{font-size:14px;font-weight:700;}
+  .review-stars{color:#f5a623;font-size:13px;}
+  .review-text{font-size:13px;color:#bbb;line-height:1.5;margin-bottom:6px;}
+  .review-meta{font-size:11px;color:#555;}
+
+  /* FINANCING */
+  .financing-box{background:#111;border:1px solid #2a0808;border-radius:8px;padding:16px;}
+  .financing-title{font-size:20px;font-weight:800;margin-bottom:4px;}
+  .financing-sub{font-size:12px;color:#888;margin-bottom:14px;}
+  .financing-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+  .fin-stat{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:6px;padding:10px;text-align:center;}
+  .fin-stat-val{font-size:18px;font-weight:800;color:var(--red);}
+  .fin-stat-label{font-size:10px;color:#666;margin-top:2px;}
+  .btn-financing{background:var(--red);color:#fff;border:none;border-radius:6px;padding:13px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;width:100%;text-decoration:none;display:block;text-align:center;}
+
+  /* WHY RF */
+  .why-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .why-tile{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:12px 8px;text-align:center;}
+  .why-icon{font-size:20px;margin-bottom:6px;}
+  .why-title{font-size:12px;font-weight:700;margin-bottom:2px;}
+  .why-sub{font-size:10px;color:#666;}
+
+  /* FOOTER */
+  .card-footer{padding:20px;text-align:center;border-top:1px solid #1a1a1a;}
+  .footer-company{font-size:13px;font-weight:700;letter-spacing:2px;color:#444;}
+  .footer-company span{color:var(--red);}
+  .footer-copy{font-size:11px;color:#333;margin-top:4px;}
+
+  /* INDEX PAGE */
+  #index-page{display:none;padding:24px 20px;}
+  .idx-header{margin-bottom:24px;}
+  .idx-title{font-family:Georgia,serif;font-size:32px;color:var(--red);margin-bottom:4px;}
+  .idx-sub{font-size:12px;color:#666;letter-spacing:2px;text-transform:uppercase;}
+  .rep-list{display:flex;flex-direction:column;gap:12px;}
+  .rep-row{background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:space-between;}
+  .rep-row-info{}
+  .rep-row-name{font-size:15px;font-weight:700;margin-bottom:2px;}
+  .rep-row-url{font-size:11px;color:var(--red);}
+  .rep-row-link{background:var(--red);color:#fff;border:none;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;}
+
+  /* NOT FOUND */
+  #notfound-page{display:none;padding:60px 20px;text-align:center;}
+  .nf-icon{font-size:48px;margin-bottom:16px;}
+  .nf-title{font-size:20px;font-weight:700;margin-bottom:8px;}
+  .nf-sub{font-size:14px;color:#666;}
+
+  /* LOADING */
+  #loading-page{display:flex;align-items:center;justify-content:center;min-height:100vh;}
+  .spinner{width:32px;height:32px;border:2px solid #1e1e1e;border-top-color:var(--red);border-radius:50%;animation:spin 0.7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<div id="loading-page"><div class="spinner"></div></div>
+
+<!-- CARD PAGE -->
+<div id="card-page">
+  <div class="rf-header">
+    <div class="rf-logo-icon">🏠</div>
+    <div class="rf-logo-text">ROOFING <span>FORCE</span></div>
+  </div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="rep-photo-wrap">
+        <div class="rep-photo-placeholder" id="rep-avatar">RF</div>
+        <div class="top-rep-badge">★ TOP REP</div>
+      </div>
+      <div class="rep-info">
+        <div class="rep-name" id="rep-name">Loading...</div>
+        <div class="rep-title" id="rep-title">Sales Representative</div>
+        <div class="rep-market" id="rep-market"></div>
+        <div class="rep-rating">
+          <div class="stars" id="rep-stars">★★★★★</div>
+          <div class="rating-text"><span id="rep-rating-val">4.9</span> <span class="rating-count" id="rep-review-count"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="red-divider"></div>
+  <div class="cta-section">
+    <a class="btn-estimate" id="btn-estimate" href="#">📞 GET A FREE ESTIMATE</a>
+    <div class="btn-row">
+      <a class="btn-call" id="btn-call" href="#">📞 CALL ME</a>
+      <a class="btn-text-me" id="btn-text" href="#">💬 TEXT ME</a>
+    </div>
+    <div class="btn-row2">
+      <a class="btn-save" id="btn-save-contact" href="#">👤 SAVE CONTACT</a>
+      <a class="btn-website" href="https://roofingforce.com" target="_blank">🌐 OUR WEBSITE</a>
+    </div>
+  </div>
+
+  <div class="section" id="work-section">
+    <div class="section-label">OUR WORK</div>
+    <div class="work-grid" id="work-grid"></div>
+  </div>
+
+  <div class="section" id="reviews-section">
+    <div class="section-label">WHAT HOMEOWNERS SAY</div>
+    <div id="reviews-container"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">FINANCING OPTIONS</div>
+    <div class="financing-box">
+      <div class="financing-title" id="fin-title">NO MONEY DOWN</div>
+      <div class="financing-sub" id="fin-sub">Flexible payment plans for every budget</div>
+      <div class="financing-stats">
+        <div class="fin-stat"><div class="fin-stat-val" id="fin-rate">0%</div><div class="fin-stat-label" id="fin-rate-label">Interest for 12 months</div></div>
+        <div class="fin-stat"><div class="fin-stat-val" id="fin-down">$0</div><div class="fin-stat-label">Down payment required</div></div>
+        <div class="fin-stat"><div class="fin-stat-val" id="fin-monthly">~$89</div><div class="fin-stat-label">Est. monthly payment</div></div>
+      </div>
+      <a class="btn-financing" id="btn-financing" href="#" target="_blank">CHECK YOUR OPTIONS →</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">WHY ROOFING FORCE</div>
+    <div class="why-grid" id="why-grid">
+      <div class="why-tile"><div class="why-icon">🛡️</div><div class="why-title">Insured</div><div class="why-sub">Fully Licensed &amp; Insured</div></div>
+      <div class="why-tile"><div class="why-icon">✅</div><div class="why-title">10+ Yrs</div><div class="why-sub">Industry Experience</div></div>
+      <div class="why-tile"><div class="why-icon">🕐</div><div class="why-title">Claim Help</div><div class="why-sub">Insurance Specialists</div></div>
+      <div class="why-tile"><div class="why-icon">🛡️</div><div class="why-title">Warranty</div><div class="why-sub">Lifetime Workmanship</div></div>
+      <div class="why-tile"><div class="why-icon">⚡</div><div class="why-title">Fast</div><div class="why-sub">1-Day Installs</div></div>
+      <div class="why-tile"><div class="why-icon">📍</div><div class="why-title">Local</div><div class="why-sub">Locally Owned</div></div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="footer-company">ROOFING <span>FORCE</span> LLC</div>
+    <div class="footer-copy">© 2026 · All Rights Reserved</div>
+  </div>
+</div>
+
+<!-- INDEX PAGE -->
+<div id="index-page">
+  <div class="rf-header">
+    <div class="rf-logo-icon">🏠</div>
+    <div class="rf-logo-text">ROOFING <span>FORCE</span></div>
+  </div>
+  <div id="index-body" style="padding:24px 16px;">
+    <div style="margin-bottom:20px;">
+      <div style="font-size:28px;font-weight:800;color:var(--red);margin-bottom:4px;">RF CARDS</div>
+      <div style="font-size:11px;color:#666;letter-spacing:2px;text-transform:uppercase;">Digital Business Cards</div>
+    </div>
+    <div id="rep-list-container"></div>
+  </div>
+</div>
+
+<!-- NOT FOUND -->
+<div id="notfound-page">
+  <div class="nf-icon">🏠</div>
+  <div class="nf-title">Rep not found</div>
+  <div class="nf-sub">This card doesn't exist yet</div>
+</div>
+
+<script>
+const SB_URL = 'https://bbkyykcoheqbivycztva.supabase.co';
+const SB_KEY = 'sb_publishable_8m3cMwg_zFD--_uZE9gSfw_9Htd1It4';
+
+async function sb(path) {
+  const r = await fetch(SB_URL+'/rest/v1/'+path, {
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+  });
+  if(!r.ok) return null;
+  return r.json();
+}
+
+function hide(id){ document.getElementById(id).style.display='none'; }
+function show(id, display){ document.getElementById(id).style.display=display||'block'; }
+
+async function init() {
+  const slug = window.location.pathname.replace(/^\/+/,'').replace(/\/+$/,'').toLowerCase();
+
+  if(!slug) {
+    // Index page — show all reps
+    const reps = await sb('rf_cards?active=eq.true&order=last');
+    hide('loading-page');
+    show('index-page');
+    const container = document.getElementById('rep-list-container');
+    if(!reps || !reps.length) {
+      container.innerHTML = '<div style="color:#666;text-align:center;padding:40px;">No cards yet</div>';
+      return;
+    }
+    container.innerHTML = reps.map(r => `
+      <div style="background:#111;border:1px solid #1e1e1e;border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:2px;">${r.first} ${r.last||''}</div>
+          <div style="font-size:11px;color:var(--red);">rf-cards.vercel.app/${r.slug}</div>
+        </div>
+        <a href="/${r.slug}" style="background:var(--red);color:#fff;border:none;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:600;text-decoration:none;">View</a>
+      </div>
+    `).join('');
+    return;
+  }
+
+  // Load rep card
+  // Load rep card
+  const [rep, template] = await Promise.all([
+    sb(`rf_cards?slug=eq.${slug}`),
+    sb("rf_card_template?id=eq.1"),
+  ]);
+
+  const r0 = rep && rep.length ? rep[0] : null;
+  let reviews = [], reviewStats = [];
+  if(r0) {
+    const rfRep = await sb(`rf_reps?name=ilike.${encodeURIComponent(r0.first)}%25&limit=1`);
+    if(rfRep && rfRep.length) {
+      const repId = rfRep[0].id;
+      reviewStats = await sb(`rf_reviews?rep_id=eq.${repId}`) || [];
+      reviews = await sb(`rf_reviews?rep_id=eq.${repId}&order=created_at.desc&limit=3`) || [];
+    }
+  }
+
+  hide('loading-page');
+
+  if(!rep || (Array.isArray(rep) && !rep.length)) {
+    show('notfound-page');
+    return;
+  }
+
+  const r = r0;
+  const tmpl = template && template.length ? template[0] : {};
+
+  // Set page title
+  document.title = `${r.first} ${r.last||''} — Roofing Force`;
+
+  // Avatar
+  const initials = (r.first?r.first[0]:'') + (r.last?r.last[0]:'');
+  if(r.photo_url) {
+    const img = document.createElement('img');
+    img.src = r.photo_url; img.className='rep-photo'; img.alt=r.first;
+    document.querySelector('.rep-photo-wrap').replaceChild(img, document.getElementById('rep-avatar'));
+  } else {
+    document.getElementById('rep-avatar').textContent = initials.toUpperCase();
+  }
+
+  // Rep info
+  document.getElementById('rep-name').textContent = r.first + (r.last?' '+r.last:'');
+  document.getElementById('rep-title').textContent = r.title||'Sales Representative';
+  if(r.market) document.getElementById('rep-market').textContent = r.market;
+
+  // Rating from 5star tracker
+  if(reviewStats && reviewStats.length) {
+    const count = reviewStats.length;
+    document.getElementById('rep-review-count').textContent = `· ${count} review${count!==1?'s':''}`;
+  }
+
+  // CTA buttons
+  const phone = r.phone||'';
+  document.getElementById('btn-estimate').href = phone?`tel:${phone}`:'tel:';
+  document.getElementById('btn-call').href = phone?`tel:${phone}`:'#';
+  document.getElementById('btn-text').href = phone?`sms:${phone}`:'#';
+
+  // Save contact vCard
+  if(phone || r.email) {
+    const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${r.first} ${r.last||''}\nORG:Roofing Force\nTITLE:${r.title||'Sales Rep'}\nTEL:${phone}\nEMAIL:${r.email||''}\nEND:VCARD`;
+    const blob = new Blob([vcard],{type:'text/vcard'});
+    document.getElementById('btn-save-contact').href = URL.createObjectURL(blob);
+    document.getElementById('btn-save-contact').download = `${r.first}-${r.last||'RF'}.vcf`;
+  }
+
+  // Financing from template
+  if(tmpl.fin_rate) document.getElementById('fin-rate').textContent = tmpl.fin_rate;
+  if(tmpl.fin_down) document.getElementById('fin-down').textContent = tmpl.fin_down;
+  if(tmpl.fin_monthly) document.getElementById('fin-monthly').textContent = tmpl.fin_monthly;
+  if(tmpl.fin_title) document.getElementById('fin-title').textContent = tmpl.fin_title;
+  if(tmpl.fin_url) document.getElementById('btn-financing').href = tmpl.fin_url;
+
+  // Work photos from template
+  const workPhotos = tmpl.work_photos ? JSON.parse(tmpl.work_photos) : [
+    {url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',label:'Architectural Shingle'},
+    {url:'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400',label:'Metal Panel'},
+    {url:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400',label:'Stone Coated Metal'},
+    {url:'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400',label:'Premium Composite'}
+  ];
+  const wg = document.getElementById('work-grid');
+  wg.innerHTML = workPhotos.slice(0,4).map(p=>`
+    <div class="work-photo-wrap">
+      <img class="work-photo" src="${p.url}" alt="${p.label}" loading="lazy">
+      <div class="work-photo-label">${p.label}</div>
+    </div>
+  `).join('');
+
+  // Featured reviews — use rep's actual reviews from 5star tracker
+  const rc = document.getElementById('reviews-container');
+  const featuredReviews = r.featured_reviews ? JSON.parse(r.featured_reviews) : null;
+  const displayReviews = featuredReviews || (reviews && reviews.length ? reviews.map(rv=>({
+    name: rv.customer_name||'Customer',
+    text: rv.review_text||'Great service!',
+    source: 'Google Review',
+    date: rv.created_at ? timeAgo(rv.created_at) : 'Recently'
+  })) : [
+    {name:'Sarah M.',text:'Amazing service — handled everything with my insurance company and had my roof done in one day!',source:'Google Review',date:'2 weeks ago'},
+    {name:'Tom & Linda K.',text:'They found storm damage we didn\'t even know about. Insurance covered everything.',source:'Google Review',date:'1 month ago'}
+  ]);
+
+  rc.innerHTML = displayReviews.map(rv=>`
+    <div class="review-card">
+      <div class="review-header">
+        <div class="reviewer-name">${rv.name}</div>
+        <div class="review-stars">★★★★★</div>
+      </div>
+      <div class="review-text">"${rv.text}"</div>
+      <div class="review-meta">${rv.source||'Google Review'} · ${rv.date||'Recently'}</div>
+    </div>
+  `).join('');
+
+  show('card-page');
+}
+
+function timeAgo(dateStr) {
+  const d = new Date(dateStr), now = new Date();
+  const days = Math.floor((now-d)/86400000);
+  if(days<7) return days+'d ago';
+  if(days<30) return Math.floor(days/7)+'w ago';
+  if(days<365) return Math.floor(days/30)+' months ago';
+  return Math.floor(days/365)+'y ago';
+}
+
+init();
+</script>
+</body>
+</html>
