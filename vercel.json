@@ -1,4 +1,5 @@
 {
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -7,5 +8,8 @@
         { "key": "Content-Security-Policy", "value": "frame-ancestors *" }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/:slug", "destination": "/:slug.html" }
   ]
 }
