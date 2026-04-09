@@ -259,14 +259,22 @@ async function init() {
   }
 
   // Load rep card
-  const [rep, template, reviews] = await Promise.all([
-    sb(`rf_cards?slug=eq.${slug}&single=true`),
-    sb('rf_card_template?id=eq.1'),
-    sb(`rf_reviews?rep_name=ilike.${slug}%25&order=created_at.desc&limit=3`)
+  // Load rep card
+  const [rep, template] = await Promise.all([
+    sb(`rf_cards?slug=eq.${slug}`),
+    sb("rf_card_template?id=eq.1"),
   ]);
 
-  // Also get 5star review stats
-  const reviewStats = await sb(`rf_reviews?rep_name=ilike.${slug}%25`);
+  const r0 = rep && rep.length ? rep[0] : null;
+  let reviews = [], reviewStats = [];
+  if(r0) {
+    const rfRep = await sb(`rf_reps?name=ilike.${encodeURIComponent(r0.first)}%25&limit=1`);
+    if(rfRep && rfRep.length) {
+      const repId = rfRep[0].id;
+      reviewStats = await sb(`rf_reviews?rep_id=eq.${repId}`) || [];
+      reviews = await sb(`rf_reviews?rep_id=eq.${repId}&order=created_at.desc&limit=3`) || [];
+    }
+  }
 
   hide('loading-page');
 
@@ -275,7 +283,7 @@ async function init() {
     return;
   }
 
-  const r = Array.isArray(rep) ? rep[0] : rep;
+  const r = r0;
   const tmpl = template && template.length ? template[0] : {};
 
   // Set page title
