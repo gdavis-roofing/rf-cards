@@ -2,27 +2,435 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>RF Cards — Roofing Force</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  body { background: #0a0a0a; color: #f0ede8; font-family: 'DM Sans', sans-serif; margin: 0; padding: 40px 20px; }
-  h1 { font-family: Georgia, serif; color: #D1271E; font-size: 36px; margin-bottom: 4px; }
-  p { color: #666; font-size: 13px; margin-bottom: 40px; }
-  .card { background: #111; border: 1px solid #242424; border-radius: 6px; padding: 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-  .card-name { font-size: 16px; font-weight: 600; }
-  .card-url { font-size: 12px; color: #666; }
-  .btn { background: #D1271E; color: white; border: none; border-radius: 4px; padding: 8px 16px; font-size: 12px; cursor: pointer; text-decoration: none; }
+  :root {
+    --red:#D1271E;--red-dark:#a01e17;--red-glow:rgba(209,39,30,0.3);
+    --bg:#0a0a0a;--surface:#111;--surface2:#181818;--border:#242424;
+    --text:#f0ede8;--muted:#666;--green:#27ae60;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .header-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);letter-spacing:1px;}
+  .header-sub{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+  .btn-add{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 20px;cursor:pointer;letter-spacing:0.5px;}
+  .btn-add:hover{background:var(--red-dark);}
+  .body{padding:24px;}
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+  .card-item{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;position:relative;overflow:hidden;transition:border-color 0.15s;}
+  .card-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);}
+  .card-item:hover{border-color:rgba(209,39,30,0.4);}
+  .card-avatar{width:48px;height:48px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;margin-bottom:12px;}
+  .card-name{font-size:15px;font-weight:600;margin-bottom:2px;}
+  .card-title{font-size:12px;color:var(--muted);margin-bottom:8px;}
+  .card-url{font-size:11px;color:var(--red);margin-bottom:14px;word-break:break-all;}
+  .card-actions{display:flex;gap:6px;}
+  .btn-sm{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 10px;cursor:pointer;transition:all 0.15s;}
+  .btn-sm:hover{color:var(--text);border-color:var(--muted);}
+  .btn-sm.danger:hover{color:#ff6b6b;border-color:#ff6b6b;}
+  .btn-sm.primary{background:var(--red);border-color:var(--red);color:#fff;}
+  .btn-sm.primary:hover{background:var(--red-dark);}
+  .status-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;margin-bottom:10px;}
+  .status-live{background:rgba(39,174,96,0.1);color:var(--green);border:1px solid rgba(39,174,96,0.2);}
+  .status-pending{background:rgba(201,168,76,0.1);color:#c9a84c;border:1px solid rgba(201,168,76,0.2);}
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;width:100%;max-width:480px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.8);max-height:90vh;overflow-y:auto;}
+  .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:24px;letter-spacing:1px;}
+  .form-group{margin-bottom:14px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
+  .form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 11px;outline:none;transition:border-color 0.15s;}
+  .form-input:focus{border-color:var(--red);}
+  .form-hint{font-size:10px;color:var(--muted);margin-top:4px;}
+  .modal-actions{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;}
+  .btn-cancel{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 18px;cursor:pointer;}
+  .btn-save{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 20px;cursor:pointer;}
+  .btn-save:disabled{opacity:0.5;cursor:not-allowed;}
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-size:13px;color:var(--text);z-index:200;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+  .toast.show{opacity:1;}
+  .toast.success{border-color:var(--green);color:var(--green);}
+  .toast.error{border-color:#ff6b6b;color:#ff6b6b;}
+  /* PREVIEW */
+  .card-preview{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:16px;margin-top:16px;}
+  .preview-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .preview-card{background:linear-gradient(135deg,#1a0000,#2a0808);border-radius:8px;padding:20px;text-align:center;}
+  .preview-avatar{width:56px;height:56px;border-radius:50%;background:var(--red);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;}
+  .preview-name{font-size:16px;font-weight:700;margin-bottom:2px;}
+  .preview-title{font-size:11px;color:var(--muted);}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+  .empty-icon{font-size:48px;margin-bottom:16px;}
+  .empty-text{font-size:14px;margin-bottom:20px;}
+  @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-  <h1>RF CARDS</h1>
-  <p>Digital business cards for Roofing Force reps</p>
-  <div class="card">
-    <div>
-      <div class="card-name">Preston Golden</div>
-      <div class="card-url">rf-cards.vercel.app/preston</div>
-    </div>
-    <a class="btn" href="/preston">View Card</a>
+
+<div class="header">
+  <div>
+    <div class="header-title">RF CARDS</div>
+    <div class="header-sub">Digital Business Cards</div>
   </div>
+  <button class="btn-add" onclick="openAddModal()">+ New Card</button>
+</div>
+
+<div class="body">
+  <div class="cards-grid" id="cards-grid">
+    <div class="empty-state">
+      <div class="empty-icon">📇</div>
+      <div class="empty-text">Loading cards...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="card-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">New Card</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" id="inp-first" type="text" placeholder="Preston" oninput="updateSlug()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" id="inp-last" type="text" placeholder="Golden" oninput="updateSlug()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Title</label>
+      <input class="form-input" id="inp-title" type="text" placeholder="Sales Rep">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input class="form-input" id="inp-phone" type="tel" placeholder="(479) 555-0100">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="inp-email" type="email" placeholder="preston@roofingforce.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Market</label>
+      <input class="form-input" id="inp-market" type="text" placeholder="Joplin, MO">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Card URL Slug</label>
+      <input class="form-input" id="inp-slug" type="text" placeholder="preston">
+      <div class="form-hint">rf-cards.vercel.app/<span id="slug-preview">preston</span></div>
+    </div>
+
+    <div class="card-preview">
+      <div class="preview-label">Preview</div>
+      <div class="preview-card">
+        <div class="preview-avatar" id="prev-avatar">PG</div>
+        <div class="preview-name" id="prev-name">Preston Golden</div>
+        <div class="preview-title" id="prev-title">Sales Rep · Joplin, MO</div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="btn-save" onclick="saveCard()">Deploy Card</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GITHUB_TOKEN = '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';
+const GITHUB_REPO = 'gdavis-roofing/rf-cards';
+const SUPABASE_URL = 'https://bbkyykcoheqbivycztva.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJia3l5a2NvaGVxYml2eWN6dHZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMDM0NjEsImV4cCI6MjA1ODY3OTQ2MX0.kudBMvIBFCXjNbfGPvFEEYSLMEXjLeSQRBJFRTSmFJM';
+
+let allCards = [];
+let editingSlug = null;
+
+async function sb(path, opts={}) {
+  const res = await fetch(SUPABASE_URL+'/rest/v1/'+path, {
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':opts.prefer||''},
+    ...opts
+  });
+  if(res.status===204) return null;
+  if(!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function ghGet(path) {
+  const res = await fetch('https://api.github.com/repos/'+GITHUB_REPO+'/'+path, {
+    headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
+  });
+  if(!res.ok && res.status!==404) throw new Error('GitHub error: '+res.status);
+  if(res.status===404) return null;
+  return res.json();
+}
+
+async function ghPut(path, content, message, sha) {
+  const body = {message, content: btoa(unescape(encodeURIComponent(content)))};
+  if(sha) body.sha = sha;
+  const res = await fetch('https://api.github.com/repos/'+GITHUB_REPO+'/'+path, {
+    method:'PUT',
+    headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error('GitHub write error: '+(await res.text()));
+  return res.json();
+}
+
+async function ghDelete(path, message, sha) {
+  const res = await fetch('https://api.github.com/repos/'+GITHUB_REPO+'/'+path, {
+    method:'DELETE',
+    headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body: JSON.stringify({message, sha})
+  });
+  if(!res.ok) throw new Error('GitHub delete error: '+(await res.text()));
+}
+
+function generateCardHTML(card) {
+  const initials = (card.first[0]||'') + (card.last[0]||'');
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${card.first} ${card.last} — Roofing Force</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#0a0a0a;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:20px;}
+  .card{background:linear-gradient(160deg,#1a0a0a,#0f0f0f);border:1px solid #2a0808;border-radius:16px;width:100%;max-width:380px;overflow:hidden;box-shadow:0 24px 80px rgba(209,39,30,0.15);}
+  .card-header{background:linear-gradient(135deg,#D1271E,#8a1510);padding:32px 24px;text-align:center;}
+  .avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.15);border:3px solid rgba(255,255,255,0.3);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;}
+  .name{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;}
+  .title{font-size:13px;color:rgba(255,255,255,0.75);}
+  .company{font-size:11px;color:rgba(255,255,255,0.5);margin-top:3px;}
+  .card-body{padding:24px;}
+  .info-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #1a1a1a;}
+  .info-row:last-of-type{border-bottom:none;}
+  .info-icon{font-size:18px;width:28px;text-align:center;}
+  .info-text{font-size:14px;color:#e0ddd8;}
+  .info-text a{color:#e0ddd8;text-decoration:none;}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px;}
+  .btn{display:block;text-align:center;padding:13px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;border:none;}
+  .btn-call{background:#D1271E;color:#fff;}
+  .btn-text{background:#1a1a1a;border:1px solid #333;color:#e0ddd8;}
+  .footer{text-align:center;padding:16px;border-top:1px solid #1a1a1a;}
+  .footer-logo{font-size:11px;color:#444;letter-spacing:2px;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-header">
+    <div class="avatar">${initials}</div>
+    <div class="name">${card.first} ${card.last}</div>
+    <div class="title">${card.title||'Sales Representative'}</div>
+    <div class="company">Roofing Force${card.market?' · '+card.market:''}</div>
+  </div>
+  <div class="card-body">
+    ${card.phone?`<div class="info-row"><span class="info-icon">📞</span><span class="info-text"><a href="tel:${card.phone}">${card.phone}</a></span></div>`:''}
+    ${card.email?`<div class="info-row"><span class="info-icon">✉️</span><span class="info-text"><a href="mailto:${card.email}">${card.email}</a></span></div>`:''}
+    ${card.market?`<div class="info-row"><span class="info-icon">📍</span><span class="info-text">Serving ${card.market}</span></div>`:''}
+    <div class="btn-row">
+      ${card.phone?`<a class="btn btn-call" href="tel:${card.phone}">📞 Call</a>`:'<div></div>'}
+      ${card.phone?`<a class="btn btn-text" href="sms:${card.phone}">💬 Text</a>`:'<div></div>'}
+    </div>
+  </div>
+  <div class="footer"><div class="footer-logo">⭐ Licensed &amp; Insured · Free Estimates</div></div>
+</div>
+</body>
+</html>`;
+}
+
+async function loadCards() {
+  try {
+    const data = await sb('rf_cards?order=last');
+    if(Array.isArray(data) && data.length > 0) {
+      allCards = data;
+      renderCards();
+      return;
+    }
+  } catch(e) {}
+  // Fallback — scan GitHub repo for HTML files
+  try {
+    const contents = await ghGet('contents');
+    if(contents) {
+      allCards = contents
+        .filter(f => f.name.endsWith('.html') && f.name !== 'index.html')
+        .map(f => ({
+          slug: f.name.replace('.html',''),
+          first: f.name.replace('.html','').charAt(0).toUpperCase()+f.name.replace('.html','').slice(1),
+          last: '', title:'Sales Rep', phone:'', email:'', market:'',
+          sha: f.sha
+        }));
+      renderCards();
+    }
+  } catch(e) {
+    renderEmpty();
+  }
+}
+
+function renderCards() {
+  const grid = document.getElementById('cards-grid');
+  if(!allCards.length) { renderEmpty(); return; }
+  grid.innerHTML = allCards.map(c => {
+    const initials = (c.first?c.first[0]:'') + (c.last?c.last[0]:'');
+    const fullName = c.first + (c.last?' '+c.last:'');
+    return `<div class="card-item">
+      <div class="card-avatar">${initials.toUpperCase()}</div>
+      <span class="status-badge status-live">● Live</span>
+      <div class="card-name">${fullName}</div>
+      <div class="card-title">${c.title||'Sales Rep'}${c.market?' · '+c.market:''}</div>
+      <div class="card-url">rf-cards.vercel.app/${c.slug}</div>
+      <div class="card-actions">
+        <button class="btn-sm primary" onclick="window.open('https://rf-cards.vercel.app/${c.slug}','_blank')">View</button>
+        <button class="btn-sm" onclick="openEdit('${c.slug}')">Edit</button>
+        <button class="btn-sm danger" onclick="deleteCard('${c.slug}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderEmpty() {
+  document.getElementById('cards-grid').innerHTML = `<div class="empty-state"><div class="empty-icon">📇</div><div class="empty-text">No cards yet — add your first rep</div></div>`;
+}
+
+function updateSlug() {
+  const first = document.getElementById('inp-first').value.trim().toLowerCase();
+  const slug = first.replace(/\s+/g,'');
+  if(!editingSlug) document.getElementById('inp-slug').value = slug;
+  document.getElementById('slug-preview').textContent = document.getElementById('inp-slug').value || 'slug';
+  const fn = document.getElementById('inp-first').value.trim();
+  const ln = document.getElementById('inp-last').value.trim();
+  const ti = document.getElementById('inp-title').value.trim();
+  const mk = document.getElementById('inp-market').value.trim();
+  document.getElementById('prev-avatar').textContent = ((fn[0]||'')+(ln[0]||'')).toUpperCase()||'RF';
+  document.getElementById('prev-name').textContent = (fn+' '+ln).trim()||'Rep Name';
+  document.getElementById('prev-title').textContent = (ti||'Sales Rep')+(mk?' · '+mk:'');
+}
+
+function openAddModal() {
+  editingSlug = null;
+  document.getElementById('modal-title').textContent = 'New Card';
+  document.getElementById('btn-save').textContent = 'Deploy Card';
+  ['first','last','title','phone','email','market','slug'].forEach(f => document.getElementById('inp-'+f).value='');
+  document.getElementById('slug-preview').textContent='slug';
+  document.getElementById('prev-avatar').textContent='RF';
+  document.getElementById('prev-name').textContent='Rep Name';
+  document.getElementById('prev-title').textContent='Sales Rep';
+  document.getElementById('card-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('inp-first').focus(),100);
+}
+
+function openEdit(slug) {
+  const card = allCards.find(c=>c.slug===slug);
+  if(!card) return;
+  editingSlug = slug;
+  document.getElementById('modal-title').textContent = 'Edit Card';
+  document.getElementById('btn-save').textContent = 'Update Card';
+  document.getElementById('inp-first').value = card.first||'';
+  document.getElementById('inp-last').value = card.last||'';
+  document.getElementById('inp-title').value = card.title||'';
+  document.getElementById('inp-phone').value = card.phone||'';
+  document.getElementById('inp-email').value = card.email||'';
+  document.getElementById('inp-market').value = card.market||'';
+  document.getElementById('inp-slug').value = card.slug||'';
+  updateSlug();
+  document.getElementById('card-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('card-modal').classList.remove('open');
+  editingSlug = null;
+}
+
+async function saveCard() {
+  const card = {
+    first: document.getElementById('inp-first').value.trim(),
+    last: document.getElementById('inp-last').value.trim(),
+    title: document.getElementById('inp-title').value.trim()||'Sales Rep',
+    phone: document.getElementById('inp-phone').value.trim(),
+    email: document.getElementById('inp-email').value.trim(),
+    market: document.getElementById('inp-market').value.trim(),
+    slug: document.getElementById('inp-slug').value.trim().toLowerCase().replace(/\s+/g,''),
+  };
+  if(!card.first) { showToast('Enter a first name','error'); return; }
+  if(!card.slug) { showToast('Enter a URL slug','error'); return; }
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.textContent = 'Deploying...';
+
+  try {
+    const html = generateCardHTML(card);
+    
+    // Check if file exists for SHA
+    const existing = await ghGet('contents/'+card.slug+'.html');
+    const sha = existing ? existing.sha : null;
+    const msg = editingSlug ? 'Update card: '+card.slug : 'Add card: '+card.slug;
+    await ghPut('contents/'+card.slug+'.html', html, msg, sha);
+
+    // Save to Supabase
+    try {
+      if(editingSlug) {
+        await sb('rf_cards?slug=eq.'+editingSlug, {method:'PATCH',prefer:'return=minimal',body:JSON.stringify(card)});
+        const idx = allCards.findIndex(c=>c.slug===editingSlug);
+        if(idx>-1) allCards[idx]={...allCards[idx],...card};
+      } else {
+        await sb('rf_cards', {method:'POST',prefer:'return=minimal',body:JSON.stringify(card)});
+        allCards.push(card);
+      }
+    } catch(e) {
+      // Supabase table may not exist yet, still works from GitHub
+      if(!editingSlug) allCards.push(card);
+      else { const idx=allCards.findIndex(c=>c.slug===editingSlug); if(idx>-1) allCards[idx]={...allCards[idx],...card}; }
+    }
+
+    renderCards();
+    closeModal();
+    showToast('Card deployed! Live at rf-cards.vercel.app/'+card.slug,'success');
+  } catch(e) {
+    showToast('Error: '+e.message,'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingSlug ? 'Update Card' : 'Deploy Card';
+  }
+}
+
+async function deleteCard(slug) {
+  if(!confirm('Delete card for '+slug+'? This cannot be undone.')) return;
+  try {
+    
+    const existing = await ghGet('contents/'+card.slug+'.html');
+    if(existing) await ghDelete('contents/'+card.slug+'.html', 'Delete card: '+slug, existing.sha);
+    try { await sb('rf_cards?slug=eq.'+slug, {method:'DELETE'}); } catch(e){}
+    allCards = allCards.filter(c=>c.slug!==slug);
+    renderCards();
+    showToast(slug+' card deleted');
+  } catch(e) {
+    showToast('Error: '+e.message,'error');
+  }
+}
+
+function showToast(msg, type='') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast',3000);
+}
+
+document.getElementById('inp-slug').addEventListener('input', ()=>{
+  document.getElementById('slug-preview').textContent = document.getElementById('inp-slug').value||'slug';
+});
+['inp-title','inp-market'].forEach(id=>document.getElementById(id).addEventListener('input',updateSlug));
+document.getElementById('card-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+loadCards();
+</script>
 </body>
 </html>
