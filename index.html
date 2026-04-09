@@ -127,12 +127,11 @@ const SB_URL = 'https://bbkyykcoheqbivycztva.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJia3l5a2NvaGVxYml2eWN6dHZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMDM0NjEsImV4cCI6MjA1ODY3OTQ2MX0.kudBMvIBFCXjNbfGPvFEEYSLMEXjLeSQRBJFRTSmFJM';
 
 async function sb(path, opts={}) {
-  const res = await fetch(SB_URL+'/rest/v1/'+path, {
-    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':opts.prefer||''},
-    ...opts
-  });
+  const headers = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+  if(opts.prefer) headers['Prefer'] = opts.prefer;
+  const res = await fetch(SB_URL+'/rest/v1/'+path, {headers, method:opts.method||'GET', body:opts.body||undefined});
   if(res.status===204) return null;
-  if(!res.ok) throw new Error(await res.text());
+  if(!res.ok){ const t=await res.text(); console.error('SB error:',res.status,t); throw new Error(t); }
   return res.json();
 }
 
@@ -144,7 +143,7 @@ async function load() {
     cards = data||[];
     render();
   } catch(e) {
-    document.getElementById('cards-grid').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div>Could not load cards</div></div>`;
+    document.getElementById('cards-grid').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div>Could not load cards: ${e.message}</div></div>`;
   }
 }
 
