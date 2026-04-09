@@ -9,51 +9,90 @@
   :root{--red:#D1271E;--red-dark:#a01e17;--bg:#0a0a0a;--surface:#111;--surface2:#181818;--border:#242424;--text:#f0ede8;--muted:#666;--green:#27ae60;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
-  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
-  .header-left .title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);letter-spacing:1px;}
-  .header-left .sub{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
-  .btn-add{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 20px;cursor:pointer;}
+
+  /* HEADER */
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+  .header-left .title{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--red);letter-spacing:1px;}
+  .header-left .sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .btn-add{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 18px;cursor:pointer;}
   .btn-add:hover{background:var(--red-dark);}
-  .body{padding:24px;}
-  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-  .card-item{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;position:relative;overflow:hidden;transition:border-color 0.15s;}
+
+  /* TABS */
+  .tabs{display:flex;gap:2px;padding:12px 20px 0;background:var(--surface);border-bottom:1px solid var(--border);}
+  .tab{padding:8px 18px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:0.5px;transition:all 0.15s;}
+  .tab.active{color:var(--text);border-bottom-color:var(--red);}
+  .tab:hover{color:var(--text);}
+
+  /* BODY */
+  .body{padding:20px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  /* CARDS GRID */
+  .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .card-item{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:18px;position:relative;overflow:hidden;transition:border-color 0.15s;}
   .card-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);}
-  .card-item:hover{border-color:rgba(209,39,30,0.4);}
-  .card-avatar{width:48px;height:48px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;margin-bottom:12px;}
-  .card-name{font-size:15px;font-weight:600;margin-bottom:2px;}
-  .card-title-text{font-size:12px;color:var(--muted);margin-bottom:4px;}
-  .card-phone{font-size:12px;color:#aaa;margin-bottom:8px;}
-  .card-url{font-size:11px;color:var(--red);margin-bottom:14px;}
-  .card-actions{display:flex;gap:6px;flex-wrap:wrap;}
-  .btn-sm{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 10px;cursor:pointer;transition:all 0.15s;text-decoration:none;}
+  .card-item:hover{border-color:rgba(209,39,30,0.3);}
+  .card-avatar{width:44px;height:44px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-bottom:10px;}
+  .card-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+  .card-sub{font-size:11px;color:var(--muted);margin-bottom:3px;}
+  .card-phone-txt{font-size:11px;color:#aaa;margin-bottom:8px;}
+  .card-url{font-size:10px;color:var(--red);margin-bottom:12px;}
+  .card-actions{display:flex;gap:5px;flex-wrap:wrap;}
+  .btn-sm{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 9px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:inline-block;}
   .btn-sm:hover{color:var(--text);border-color:var(--muted);}
   .btn-sm.danger:hover{color:#ff6b6b;border-color:#ff6b6b;}
   .btn-sm.primary{background:var(--red);border-color:var(--red);color:#fff;}
-  .status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(39,174,96,0.5);margin-right:5px;}
-  .status-inactive{background:var(--muted);box-shadow:none;}
+  .status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px rgba(39,174,96,0.5);margin-right:4px;}
+  .status-inactive-dot{background:var(--muted);box-shadow:none;}
+
+  /* TEMPLATE PANEL */
+  .tmpl-section{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:16px;position:relative;}
+  .tmpl-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);}
+  .tmpl-section-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:16px;color:var(--text);}
+  .tmpl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .tmpl-save{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 20px;cursor:pointer;margin-top:16px;}
+  .tmpl-save:hover{background:var(--red-dark);}
+  .photos-list{display:flex;flex-direction:column;gap:8px;}
+  .photo-row{display:flex;gap:8px;align-items:center;}
+  .photo-row .form-input{flex:1;}
+  .btn-remove-photo{background:none;border:1px solid var(--border);border-radius:3px;color:#ff6b6b;font-size:11px;padding:4px 8px;cursor:pointer;flex-shrink:0;}
+  .btn-add-photo{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-size:11px;padding:5px 12px;cursor:pointer;margin-top:6px;}
+  .btn-add-photo:hover{color:var(--text);}
+
   /* MODAL */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
   .modal-overlay.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;width:100%;max-width:460px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.8);max-height:90vh;overflow-y:auto;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:28px;width:100%;max-width:460px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.8);max-height:90vh;overflow-y:auto;}
   .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent);}
-  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:24px;letter-spacing:1px;}
-  .form-group{margin-bottom:14px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
-  .form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 11px;outline:none;transition:border-color 0.15s;}
+  .modal-title{font-family:'Bebas Neue',sans-serif;font-size:24px;margin-bottom:20px;letter-spacing:1px;}
+  .form-group{margin-bottom:12px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;}
+  .form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;outline:none;transition:border-color 0.15s;}
   .form-input:focus{border-color:var(--red);}
-  .form-hint{font-size:10px;color:var(--muted);margin-top:4px;}
-  .modal-actions{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;}
-  .btn-cancel{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 18px;cursor:pointer;}
-  .btn-save{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:8px 20px;cursor:pointer;}
-  .btn-save:disabled{opacity:0.5;cursor:not-allowed;}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-size:13px;color:var(--text);z-index:200;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
+  .form-hint{font-size:10px;color:var(--muted);margin-top:3px;}
+  .modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
+  .btn-cancel{background:none;border:1px solid var(--border);border-radius:3px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;padding:7px 16px;cursor:pointer;}
+  .btn-save-modal{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:7px 18px;cursor:pointer;}
+  .btn-save-modal:disabled{opacity:0.5;cursor:not-allowed;}
+
+  /* PREVIEW OVERLAY */
+  .preview-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:200;flex-direction:column;}
+  .preview-overlay.open{display:flex;}
+  .preview-bar{background:#111;border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .preview-url{font-size:12px;color:var(--muted);}
+  .preview-close{background:var(--red);border:none;border-radius:3px;color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;padding:6px 14px;cursor:pointer;}
+  .preview-frame{flex:1;border:none;background:#0a0a0a;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:10px 20px;font-size:13px;color:var(--text);z-index:300;opacity:0;transition:opacity 0.2s;pointer-events:none;white-space:nowrap;}
   .toast.show{opacity:1;}
   .toast.success{border-color:var(--green);color:var(--green);}
   .toast.error{border-color:#ff6b6b;color:#ff6b6b;}
-  .empty{text-align:center;padding:60px 20px;color:var(--muted);}
-  .empty-icon{font-size:48px;margin-bottom:16px;}
-  @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+  .empty{text-align:center;padding:50px 20px;color:var(--muted);}
+  .empty-icon{font-size:40px;margin-bottom:12px;}
+  @media(max-width:600px){.form-row{grid-template-columns:1fr;}.tmpl-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -63,16 +102,90 @@
     <div class="title">RF CARDS</div>
     <div class="sub">Digital Business Cards</div>
   </div>
-  <button class="btn-add" onclick="openAdd()">+ New Card</button>
+  <button class="btn-add" id="header-btn" onclick="openAdd()">+ New Card</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('cards')">📇 Cards</div>
+  <div class="tab" onclick="switchTab('template')">🎨 Master Template</div>
 </div>
 
 <div class="body">
-  <div class="cards-grid" id="cards-grid">
-    <div class="empty"><div class="empty-icon">📇</div><div>Loading...</div></div>
+
+  <!-- CARDS TAB -->
+  <div class="tab-panel active" id="panel-cards">
+    <div class="cards-grid" id="cards-grid">
+      <div class="empty"><div class="empty-icon">📇</div><div>Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- TEMPLATE TAB -->
+  <div class="tab-panel" id="panel-template">
+
+    <div class="tmpl-section">
+      <div class="tmpl-section-title">💰 Financing Options</div>
+      <div class="tmpl-grid">
+        <div class="form-group">
+          <label class="form-label">Headline</label>
+          <input class="form-input" id="tmpl-fin-title" placeholder="NO MONEY DOWN">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subheadline</label>
+          <input class="form-input" id="tmpl-fin-sub" placeholder="Flexible plans for every budget">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Interest Rate</label>
+          <input class="form-input" id="tmpl-fin-rate" placeholder="0%">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rate Label</label>
+          <input class="form-input" id="tmpl-fin-rate-label" placeholder="Interest for 12 months">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Down Payment</label>
+          <input class="form-input" id="tmpl-fin-down" placeholder="$0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Est. Monthly</label>
+          <input class="form-input" id="tmpl-fin-monthly" placeholder="~$89">
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:10px;">
+        <label class="form-label">Financing Link URL</label>
+        <input class="form-input" id="tmpl-fin-url" placeholder="https://...">
+      </div>
+    </div>
+
+    <div class="tmpl-section">
+      <div class="tmpl-section-title">📸 Our Work Photos</div>
+      <div class="form-hint" style="margin-bottom:12px;color:var(--muted);font-size:11px;">These photos appear on every rep's card. Add up to 6 photos — paste image URLs.</div>
+      <div class="photos-list" id="photos-list"></div>
+      <button class="btn-add-photo" onclick="addPhotoRow()">+ Add Photo</button>
+    </div>
+
+    <div class="tmpl-section">
+      <div class="tmpl-section-title">🏠 Company Info</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input class="form-input" id="tmpl-company" placeholder="Roofing Force">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Website URL</label>
+          <input class="form-input" id="tmpl-website" placeholder="https://roofingforce.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Footer Tagline</label>
+        <input class="form-input" id="tmpl-tagline" placeholder="⭐ Licensed & Insured · Free Estimates">
+      </div>
+    </div>
+
+    <button class="tmpl-save" id="tmpl-save-btn" onclick="saveTemplate()">💾 Save Template — Updates All Cards Instantly</button>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- REP MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-title" id="modal-title">New Card</div>
@@ -97,7 +210,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" id="inp-email" type="email" placeholder="preston@roofingforce.com">
+        <input class="form-input" id="inp-email" type="email" placeholder="rep@roofingforce.com">
       </div>
     </div>
     <div class="form-group">
@@ -107,17 +220,26 @@
     <div class="form-group">
       <label class="form-label">Card URL Slug</label>
       <input class="form-input" id="inp-slug" type="text" placeholder="preston">
-      <div class="form-hint">Card will be live at rf-cards.vercel.app/<span id="slug-preview">slug</span></div>
+      <div class="form-hint">rf-cards.vercel.app/<span id="slug-preview">slug</span></div>
     </div>
     <div class="form-group">
-      <label class="form-label">Photo URL <span style="color:#444;font-size:9px;text-transform:none;letter-spacing:0">(optional — paste image link)</span></label>
+      <label class="form-label">Photo URL <span style="color:#444;font-size:9px;text-transform:none;letter-spacing:0">(paste image link)</span></label>
       <input class="form-input" id="inp-photo" type="url" placeholder="https://...">
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-save" id="btn-save" onclick="saveCard()">Save Card</button>
+      <button class="btn-save-modal" id="btn-save" onclick="saveCard()">Save Card</button>
     </div>
   </div>
+</div>
+
+<!-- PREVIEW OVERLAY -->
+<div class="preview-overlay" id="preview-overlay">
+  <div class="preview-bar">
+    <div class="preview-url" id="preview-url-label">rf-cards.vercel.app/...</div>
+    <button class="preview-close" onclick="closePreview()">✕ Close Preview</button>
+  </div>
+  <iframe class="preview-frame" id="preview-frame" src=""></iframe>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -131,141 +253,211 @@ async function sb(path, opts={}) {
   if(opts.prefer) headers['Prefer'] = opts.prefer;
   const res = await fetch(SB_URL+'/rest/v1/'+path, {headers, method:opts.method||'GET', body:opts.body||undefined});
   if(res.status===204) return null;
-  if(!res.ok){ const t=await res.text(); console.error('SB error:',res.status,t); throw new Error(t); }
+  if(!res.ok){ const t=await res.text(); throw new Error(t); }
   return res.json();
 }
 
-let cards=[], editId=null;
+let cards=[], editId=null, currentTab='cards';
 
+// ── TAB SWITCHING ──
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active', (i===0&&tab==='cards')||(i===1&&tab==='template')));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('header-btn').style.display = tab==='cards' ? 'block' : 'none';
+  if(tab==='template') loadTemplate();
+}
+
+// ── CARDS ──
 async function load() {
   try {
     const data = await sb('rf_cards?order=last,first');
     cards = data||[];
-    render();
+    renderCards();
   } catch(e) {
-    document.getElementById('cards-grid').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div>Could not load cards: ${e.message}</div></div>`;
+    document.getElementById('cards-grid').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div>${e.message}</div></div>`;
   }
 }
 
-function render() {
+function renderCards() {
   const grid = document.getElementById('cards-grid');
-  if(!cards.length) {
-    grid.innerHTML = `<div class="empty"><div class="empty-icon">📇</div><div>No cards yet — add your first rep</div></div>`;
-    return;
-  }
+  if(!cards.length) { grid.innerHTML=`<div class="empty"><div class="empty-icon">📇</div><div>No cards yet</div></div>`; return; }
   grid.innerHTML = cards.map(c => {
-    const init = ((c.first||'')[0]+(c.last||'')[0]).toUpperCase();
-    const active = c.active !== false;
+    const init = ((c.first||'')[0]+(c.last||'')[0]).toUpperCase()||'RF';
+    const active = c.active!==false;
     return `<div class="card-item" style="${active?'':'opacity:0.5'}">
-      <div class="card-avatar">${init||'RF'}</div>
-      <div style="font-size:10px;color:${active?'var(--green)':'var(--muted)'};margin-bottom:8px;">
-        <span class="status-dot ${active?'':'status-inactive'}"></span>${active?'Active':'Inactive'}
+      <div class="card-avatar">${init}</div>
+      <div style="font-size:10px;color:${active?'var(--green)':'var(--muted)'};margin-bottom:6px;">
+        <span class="status-dot ${active?'':'status-inactive-dot'}"></span>${active?'Active':'Inactive'}
       </div>
       <div class="card-name">${c.first||''} ${c.last||''}</div>
-      <div class="card-title-text">${c.title||'Sales Rep'}${c.market?' · '+c.market:''}</div>
-      <div class="card-phone">${c.phone||'No phone set'}</div>
+      <div class="card-sub">${c.title||'Sales Rep'}${c.market?' · '+c.market:''}</div>
+      <div class="card-phone-txt">${c.phone||'⚠️ No phone set'}</div>
       <div class="card-url">rf-cards.vercel.app/${c.slug}</div>
       <div class="card-actions">
-        <a class="btn-sm primary" href="https://rf-cards.vercel.app/${c.slug}" target="_blank">View</a>
+        <button class="btn-sm primary" onclick="previewCard('${c.slug}')">Preview</button>
+        <a class="btn-sm" href="https://rf-cards.vercel.app/${c.slug}" target="_blank">Open ↗</a>
         <button class="btn-sm" onclick="openEdit(${c.id})">Edit</button>
         <button class="btn-sm ${active?'danger':''}" onclick="toggleActive(${c.id})">${active?'Deactivate':'Activate'}</button>
-        <button class="btn-sm danger" onclick="deleteCard(${c.id})">Delete</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function autoSlug() {
-  const first = document.getElementById('inp-first').value.trim().toLowerCase();
-  if(!editId) document.getElementById('inp-slug').value = first.replace(/\s+/g,'');
-  document.getElementById('slug-preview').textContent = document.getElementById('inp-slug').value||'slug';
+function previewCard(slug) {
+  const url = 'https://rf-cards.vercel.app/'+slug;
+  document.getElementById('preview-url-label').textContent = 'rf-cards.vercel.app/'+slug;
+  document.getElementById('preview-frame').src = url;
+  document.getElementById('preview-overlay').classList.add('open');
 }
 
-document.getElementById('inp-slug').addEventListener('input', ()=>{
+function closePreview() {
+  document.getElementById('preview-overlay').classList.remove('open');
+  document.getElementById('preview-frame').src = '';
+}
+
+function autoSlug() {
+  if(!editId) document.getElementById('inp-slug').value = document.getElementById('inp-first').value.trim().toLowerCase().replace(/\s+/g,'');
   document.getElementById('slug-preview').textContent = document.getElementById('inp-slug').value||'slug';
-});
+}
+document.getElementById('inp-slug').addEventListener('input',()=>{ document.getElementById('slug-preview').textContent=document.getElementById('inp-slug').value||'slug'; });
 
 function openAdd() {
-  editId = null;
-  document.getElementById('modal-title').textContent = 'New Card';
-  document.getElementById('btn-save').textContent = 'Save Card';
+  editId=null;
+  document.getElementById('modal-title').textContent='New Card';
+  document.getElementById('btn-save').textContent='Save Card';
   ['first','last','title','phone','email','market','slug','photo'].forEach(f=>document.getElementById('inp-'+f).value='');
-  document.getElementById('slug-preview').textContent = 'slug';
+  document.getElementById('slug-preview').textContent='slug';
   document.getElementById('modal').classList.add('open');
   setTimeout(()=>document.getElementById('inp-first').focus(),100);
 }
 
 function openEdit(id) {
-  const c = cards.find(x=>x.id===id);
-  if(!c) return;
-  editId = id;
-  document.getElementById('modal-title').textContent = 'Edit Card';
-  document.getElementById('btn-save').textContent = 'Update Card';
-  document.getElementById('inp-first').value = c.first||'';
-  document.getElementById('inp-last').value = c.last||'';
-  document.getElementById('inp-title').value = c.title||'';
-  document.getElementById('inp-phone').value = c.phone||'';
-  document.getElementById('inp-email').value = c.email||'';
-  document.getElementById('inp-market').value = c.market||'';
-  document.getElementById('inp-slug').value = c.slug||'';
-  document.getElementById('inp-photo').value = c.photo_url||'';
-  document.getElementById('slug-preview').textContent = c.slug||'slug';
+  const c=cards.find(x=>x.id===id); if(!c) return;
+  editId=id;
+  document.getElementById('modal-title').textContent='Edit Card';
+  document.getElementById('btn-save').textContent='Update Card';
+  document.getElementById('inp-first').value=c.first||'';
+  document.getElementById('inp-last').value=c.last||'';
+  document.getElementById('inp-title').value=c.title||'';
+  document.getElementById('inp-phone').value=c.phone||'';
+  document.getElementById('inp-email').value=c.email||'';
+  document.getElementById('inp-market').value=c.market||'';
+  document.getElementById('inp-slug').value=c.slug||'';
+  document.getElementById('inp-photo').value=c.photo_url||'';
+  document.getElementById('slug-preview').textContent=c.slug||'slug';
   document.getElementById('modal').classList.add('open');
 }
 
-function closeModal() { document.getElementById('modal').classList.remove('open'); editId=null; }
+function closeModal(){ document.getElementById('modal').classList.remove('open'); editId=null; }
 
 async function saveCard() {
-  const data = {
-    first: document.getElementById('inp-first').value.trim(),
-    last: document.getElementById('inp-last').value.trim(),
-    title: document.getElementById('inp-title').value.trim()||'Sales Rep',
-    phone: document.getElementById('inp-phone').value.trim(),
-    email: document.getElementById('inp-email').value.trim(),
-    market: document.getElementById('inp-market').value.trim(),
-    slug: document.getElementById('inp-slug').value.trim().toLowerCase().replace(/\s+/g,''),
-    photo_url: document.getElementById('inp-photo').value.trim()||null,
+  const data={
+    first:document.getElementById('inp-first').value.trim(),
+    last:document.getElementById('inp-last').value.trim(),
+    title:document.getElementById('inp-title').value.trim()||'Sales Rep',
+    phone:document.getElementById('inp-phone').value.trim(),
+    email:document.getElementById('inp-email').value.trim(),
+    market:document.getElementById('inp-market').value.trim(),
+    slug:document.getElementById('inp-slug').value.trim().toLowerCase().replace(/\s+/g,''),
+    photo_url:document.getElementById('inp-photo').value.trim()||null,
   };
-  if(!data.first){ showToast('Enter a first name','error'); return; }
-  if(!data.slug){ showToast('Enter a URL slug','error'); return; }
-  if(cards.find(c=>c.slug===data.slug&&c.id!==editId)){ showToast('Slug already in use','error'); return; }
-
-  const btn = document.getElementById('btn-save');
+  if(!data.first){showToast('Enter a first name','error');return;}
+  if(!data.slug){showToast('Enter a URL slug','error');return;}
+  if(cards.find(c=>c.slug===data.slug&&c.id!==editId)){showToast('Slug already in use','error');return;}
+  const btn=document.getElementById('btn-save');
   btn.disabled=true; btn.textContent='Saving...';
   try {
-    if(editId) {
+    if(editId){
       await sb(`rf_cards?id=eq.${editId}`,{method:'PATCH',prefer:'return=minimal',body:JSON.stringify(data)});
-      const idx=cards.findIndex(c=>c.id===editId);
-      if(idx>-1) cards[idx]={...cards[idx],...data};
+      const idx=cards.findIndex(c=>c.id===editId); if(idx>-1) cards[idx]={...cards[idx],...data};
       showToast('Card updated ✓','success');
     } else {
-      const res = await sb('rf_cards?select=*',{method:'POST',prefer:'return=representation',body:JSON.stringify({...data,active:true})});
+      const res=await sb('rf_cards?select=*',{method:'POST',prefer:'return=representation',body:JSON.stringify({...data,active:true})});
       cards.push(res[0]);
-      showToast('Card saved — live at rf-cards.vercel.app/'+data.slug,'success');
+      showToast('Card live at rf-cards.vercel.app/'+data.slug,'success');
     }
-    render(); closeModal();
-  } catch(e){ showToast('Error: '+e.message,'error'); }
-  finally{ btn.disabled=false; btn.textContent=editId?'Update Card':'Save Card'; }
+    renderCards(); closeModal();
+  } catch(e){showToast('Error: '+e.message,'error');}
+  finally{btn.disabled=false; btn.textContent=editId?'Update Card':'Save Card';}
 }
 
-async function toggleActive(id) {
+async function toggleActive(id){
   const c=cards.find(x=>x.id===id); if(!c) return;
-  const newVal=!(c.active!==false);
-  try {
-    await sb(`rf_cards?id=eq.${id}`,{method:'PATCH',prefer:'return=minimal',body:JSON.stringify({active:newVal})});
-    c.active=newVal; render();
-    showToast(c.first+(newVal?' activated':' deactivated'));
-  } catch(e){ showToast('Error: '+e.message,'error'); }
+  const v=!(c.active!==false);
+  try{ await sb(`rf_cards?id=eq.${id}`,{method:'PATCH',prefer:'return=minimal',body:JSON.stringify({active:v})}); c.active=v; renderCards(); showToast(c.first+(v?' activated':' deactivated')); }
+  catch(e){showToast('Error: '+e.message,'error');}
 }
 
-async function deleteCard(id) {
-  const c=cards.find(x=>x.id===id); if(!c) return;
-  if(!confirm(`Delete card for ${c.first}? This cannot be undone.`)) return;
+// ── TEMPLATE ──
+let tmplPhotos = [];
+
+async function loadTemplate() {
   try {
-    await sb(`rf_cards?id=eq.${id}`,{method:'DELETE'});
-    cards=cards.filter(x=>x.id!==id); render();
-    showToast(c.first+' deleted');
+    const data = await sb('rf_card_template?id=eq.1');
+    const t = data&&data.length ? data[0] : {};
+    document.getElementById('tmpl-fin-title').value = t.fin_title||'NO MONEY DOWN';
+    document.getElementById('tmpl-fin-sub').value = t.fin_sub||'Flexible payment plans for every budget';
+    document.getElementById('tmpl-fin-rate').value = t.fin_rate||'0%';
+    document.getElementById('tmpl-fin-rate-label').value = t.fin_rate_label||'Interest for 12 months';
+    document.getElementById('tmpl-fin-down').value = t.fin_down||'$0';
+    document.getElementById('tmpl-fin-monthly').value = t.fin_monthly||'~$89';
+    document.getElementById('tmpl-fin-url').value = t.fin_url||'';
+    document.getElementById('tmpl-company').value = t.company_name||'Roofing Force';
+    document.getElementById('tmpl-website').value = t.website_url||'https://roofingforce.com';
+    document.getElementById('tmpl-tagline').value = t.tagline||'⭐ Licensed & Insured · Free Estimates';
+    tmplPhotos = t.work_photos ? JSON.parse(t.work_photos) : [
+      {url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',label:'Architectural Shingle'},
+      {url:'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400',label:'Metal Panel'},
+      {url:'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400',label:'Stone Coated Metal'},
+      {url:'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400',label:'Premium Composite'}
+    ];
+    renderPhotos();
+  } catch(e) { showToast('Could not load template','error'); }
+}
+
+function renderPhotos() {
+  const list = document.getElementById('photos-list');
+  list.innerHTML = tmplPhotos.map((p,i)=>`
+    <div class="photo-row">
+      <input class="form-input" placeholder="Image URL" value="${p.url||''}" oninput="tmplPhotos[${i}].url=this.value">
+      <input class="form-input" placeholder="Label" style="max-width:140px;" value="${p.label||''}" oninput="tmplPhotos[${i}].label=this.value">
+      <button class="btn-remove-photo" onclick="removePhoto(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function addPhotoRow() {
+  if(tmplPhotos.length>=6){showToast('Max 6 photos');return;}
+  tmplPhotos.push({url:'',label:''});
+  renderPhotos();
+}
+
+function removePhoto(i) { tmplPhotos.splice(i,1); renderPhotos(); }
+
+async function saveTemplate() {
+  const data = {
+    fin_title: document.getElementById('tmpl-fin-title').value.trim(),
+    fin_sub: document.getElementById('tmpl-fin-sub').value.trim(),
+    fin_rate: document.getElementById('tmpl-fin-rate').value.trim(),
+    fin_rate_label: document.getElementById('tmpl-fin-rate-label').value.trim(),
+    fin_down: document.getElementById('tmpl-fin-down').value.trim(),
+    fin_monthly: document.getElementById('tmpl-fin-monthly').value.trim(),
+    fin_url: document.getElementById('tmpl-fin-url').value.trim(),
+    company_name: document.getElementById('tmpl-company').value.trim(),
+    website_url: document.getElementById('tmpl-website').value.trim(),
+    tagline: document.getElementById('tmpl-tagline').value.trim(),
+    work_photos: JSON.stringify(tmplPhotos.filter(p=>p.url)),
+    updated_at: new Date().toISOString(),
+  };
+  const btn = document.getElementById('tmpl-save-btn');
+  btn.disabled=true; btn.textContent='Saving...';
+  try {
+    await sb('rf_card_template?id=eq.1',{method:'PATCH',prefer:'return=minimal',body:JSON.stringify(data)});
+    showToast('Template saved — all cards updated ✓','success');
   } catch(e){ showToast('Error: '+e.message,'error'); }
+  finally{ btn.disabled=false; btn.textContent='💾 Save Template — Updates All Cards Instantly'; }
 }
 
 function showToast(msg,type=''){
